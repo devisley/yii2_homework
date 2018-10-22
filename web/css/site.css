@@ -113,3 +113,15 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.event-box {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.event-box__item {
+    width: 500px;
+    margin-top: 20px;
+    padding: 10px;
+}

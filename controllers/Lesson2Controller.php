@@ -9,7 +9,6 @@
 namespace app\controllers;
 
 use app\models\ReviewForm;
-use yii\web\Controller;
 
 class Lesson2Controller extends MyController
 {

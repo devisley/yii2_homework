@@ -10,7 +10,7 @@ namespace app\controllers;
 
 
 use app\models\Activity;
-use yii\web\Controller;
+use app\models\ActivityForm;
 
 class ActivityController extends MyController
 {
@@ -30,5 +30,18 @@ class ActivityController extends MyController
         $model->setAttributes($values, false);
 
         return $this->render('index', ['model' => $model]);
+    }
+
+
+    public function actionAdd() {
+        $model = new ActivityForm();
+
+        if ($model->load(\Yii::$app->request->post())) {
+            if ($model->validate()) {
+                return $this->render('submit', ['model' => $model]);
+            }
+        }
+
+        return $this->render('add', ['model' => $model]);
     }
 }

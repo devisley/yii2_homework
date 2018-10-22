@@ -44,6 +44,7 @@ AppAsset::register($this);
             ['label' => 'Review', 'url' => ['/lesson2/review']],
             ['label' => 'Activity', 'url' => ['/activity/index']],
             ['label' => 'History', 'url' => ['/history/index']],
+            ['label' => 'CalendarDay', 'url' => ['/calendar-day/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

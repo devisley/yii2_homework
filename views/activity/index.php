@@ -1,3 +1,6 @@
+<?php
+    use yii\helpers\Html;
+?>
 <h1>Активность: <?=$model->title; ?></h1>
 
 <?php if($model->startDay == $model->endDay): ?>
@@ -17,3 +20,5 @@
 
 <h3><?=$model->getAttributeLabel('body') ?></h3>
 <div><?=$model->body ?></div>
+
+<?= Html::a('Добавить событие', '/activity/add', ['class' => 'btn btn-primary btn-lg'])?>

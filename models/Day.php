@@ -33,19 +33,46 @@ class Day extends Model
     public $isHoliday;
 
     /**
+     * Русское название дня недели
+     *
+     * @var bool
+     */
+    public $dayName;
+
+    /**
      * События назначенные на текущий день
      *
      * @var array
      */
     public $activities = [];
 
+    public function __construct($values, array $config = [])
+    {
+        parent::__construct($config);
+        $this->setAttributes($values, false);
+        $this->isWeekend = self::isWeekend($this->day);
+        $this->dayName = $this->getDayName();
+    }
+
     /**
-     * Возврашает имя дня недели
+     * Возврашает полное имя дня недели на русском
      *
-     * @return string Полное наименование дня недели
+     * @return string Полное имя дня недели на русском
      */
-    public function getDayName() {
-        return date("l", $this->day);
+    private function getDayName() {
+        $name = date("l", $this->day);
+
+        $days = [
+            'Sunday' => 'Воскресенье',
+            'Monday' => 'Понедельник',
+            'Tuesday' => 'Вторник',
+            'Wednesday' => 'Среда',
+            'Thursday' => 'Четверг',
+            'Friday' => 'Пятница',
+            'Saturday' => 'Суббота',
+        ];
+
+        return $days[$name];
     }
 
     /**
@@ -54,7 +81,7 @@ class Day extends Model
      * @param Activity $activity Объект типа Activity
      */
     public function addActivity(Activity $activity) {
-
+        array_push($this->activities, $activity);
     }
 
     /**
@@ -67,12 +94,13 @@ class Day extends Model
     }
 
     /**
-     * Получить события
+     * Функция определяет является ли день выходным
      *
-     * @return array Массив событий текущего дня
+     * @param $day int Текущий день в формате  Unix timestamp
+     * @return bool Возвращет истину, если день выходной.
      */
-    public function getActivities() {
-        return $this->activities;
+    public static function isWeekend($day) {
+        return (date('N', $day) >= 6);
     }
 
 }

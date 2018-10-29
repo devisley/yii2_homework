@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\RegistryForm;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -124,5 +126,34 @@ class SiteController extends MyController
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Displays registry page.
+     *
+     * @return Response|string
+     */
+    public function actionRegistry()
+    {
+        $model = new RegistryForm();
+
+        if ($model->load(\Yii::$app->request->post())) {
+            if ($model->validate()) {
+                $user = new User();
+
+                $user->setAttributes($model->getAttributes());
+//                var_dump($model);
+//                var_dump($user);
+                $user->password = $user->getPasswordHash($user->password);
+                if ($user->save()) {
+                    return $this->goBack();
+
+                    //!Этот код Возвращает ошибку:
+//                return $this->render('/site/login');
+                }
+            }
+        }
+
+        return $this->render('registry', ['model' => $model]);
     }
 }

@@ -28,6 +28,7 @@ class ActivityForm extends Model
             [['title', 'place'], 'string', 'min' => 3],
             [['body'], 'string', 'min' => 3, 'max' => 250],
             [['isImportant'], 'boolean', 'trueValue' => true, 'falseValue' => false, 'strict' => false],
+            ['endDay', 'compare', 'compareAttribute' => 'startDay', 'operator' => '>='],
         ];
     }
 

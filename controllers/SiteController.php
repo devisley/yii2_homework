@@ -146,10 +146,7 @@ class SiteController extends MyController
 //                var_dump($user);
                 $user->password = $user->getPasswordHash($user->password);
                 if ($user->save()) {
-                    return $this->goBack();
-
-                    //!Этот код Возвращает ошибку:
-//                return $this->render('/site/login');
+                    return $this->redirect('login');
                 }
             }
         }

@@ -1,7 +1,7 @@
 <?php
     use yii\helpers\Html;
 ?>
-<h3 class="text-success">Событие добавлено!</h3>
+<h5 class="text-success"><?= Yii::$app->session->getFlash('activity');?></h5>
 <h2>Тема: <?=$model->title; ?></h2>
 
 <?php if($model->startDay == $model->endDay): ?>

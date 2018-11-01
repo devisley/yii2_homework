@@ -2,14 +2,14 @@
 
 namespace app\models;
 
-use yii\base\Model;
+use yii\db\ActiveRecord;
 
 /**
  * Activity класс
  *
  * Отражает сущность хранимого в календаре события
  */
-class Activity extends Model
+class Activity extends ActiveRecord
 {
     /**
      * Название события
@@ -60,9 +60,16 @@ class Activity extends Model
      */
     public $body;
 
+    public $files;
+
     public function __construct(array $config = [])
     {
         parent::__construct($config);
+    }
+
+    public static function tableName()
+    {
+        return 'activity';
     }
 
     public function attributeLabels()
@@ -75,6 +82,17 @@ class Activity extends Model
             'body' => 'Описание события',
             'place' => 'Место события',
             'isImportant' => 'Важное событие',
+        ];
+    }
+
+    public function rules()
+    {
+        return [
+            [['title', 'startDay', 'endDay'], 'required'],
+            [['title', 'place'], 'string', 'min' => 3],
+            [['body'], 'string', 'min' => 3, 'max' => 250],
+            [['isImportant'], 'boolean', 'trueValue' => true, 'falseValue' => false, 'strict' => false],
+            ['endDay', 'compare', 'compareAttribute' => 'startDay', 'operator' => '>='],
         ];
     }
 }

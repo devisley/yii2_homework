@@ -8,9 +8,8 @@
 
 namespace app\controllers;
 
-
+use Yii;
 use app\models\Activity;
-use app\models\ActivityForm;
 
 class ActivityController extends MyController
 {
@@ -34,10 +33,16 @@ class ActivityController extends MyController
 
 
     public function actionAdd() {
-        $model = new ActivityForm();
+        $model = new Activity();
 
         if ($model->load(\Yii::$app->request->post())) {
             if ($model->validate()) {
+//                if ($model->save()) {
+//                    return $this->render('submit', ['model' => $model]);
+//                } else {
+//
+//                }
+                Yii::$app->session->setFlash('activity', "Событие успешно добавлено!");
                 return $this->render('submit', ['model' => $model]);
             }
         }

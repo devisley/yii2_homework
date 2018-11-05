@@ -17,7 +17,7 @@ class m181027_164139_create_user_table extends Migration
             'name' => $this->string(50)->notNull(),
             'login' => $this->string(50)->notNull(),
             'password' => $this->string(255)->notNull(),
-            'last_access' => $this->timestamp()->defaultExpression("now()"),
+            'last_access' => $this->integer()->defaultExpression("unix_timestamp()"),
         ]);
     }
 

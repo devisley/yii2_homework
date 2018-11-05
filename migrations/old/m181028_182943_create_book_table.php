@@ -23,6 +23,6 @@ class m181028_182943_create_book_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('book');
+//        $this->dropTable('book');
     }
 }

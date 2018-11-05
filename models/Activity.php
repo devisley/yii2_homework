@@ -2,97 +2,141 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
+use yii\behaviors\AttributeBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\filters\PageCache;
 
 /**
- * Activity класс
+ * This is the model class for table "activity".
  *
- * Отражает сущность хранимого в календаре события
+ * @property int $id_activity
+ * @property string $activity_name
+ * @property string $activity_start_timestamp
+ * @property string $activity_end_timestamp
+ * @property int $id_user
+ * @property string $place
+ * @property int $is_important
+ * @property string $body
+ * @property int $created_at
+ * @property int $updated_at
+ *
+ * @property User $user
+ * @property Day[] $days
  */
 class Activity extends ActiveRecord
 {
-    /**
-     * Название события
-     *
-     * @var string
+    /**   * {@inheritdoc}
      */
-    public $title;
-
-    /**
-     * День начала события. Хранится в Unix timestamp
-     *
-     * @var int
-     */
-    public $startDay;
-
-    /**
-     * День завершения события. Хранится в Unix timestamp
-     *
-     * @var int
-     */
-    public $endDay;
-
-    /**
-     * ID автора, создавшего события
-     *
-     * @var int
-     */
-    public $idAuthor;
-
-    /**
-     * Место где запланировано событие
-     *
-     * @var string
-     */
-    public $place;
-
-    /**
-     * Важное событие
-     *
-     * @var bool
-     */
-    public $isImportant;
-
-    /**
-     * Описание события
-     *
-     * @var string
-     */
-    public $body;
-
-    public $files;
-
-    public function __construct(array $config = [])
-    {
-        parent::__construct($config);
-    }
-
     public static function tableName()
     {
         return 'activity';
     }
 
-    public function attributeLabels()
-    {
-        return [
-            'title' => 'Название события',
-            'startDay' => 'Дата начала',
-            'endDay' => 'Дата завершения',
-            'idAuthor' => 'ID автора',
-            'body' => 'Описание события',
-            'place' => 'Место события',
-            'isImportant' => 'Важное событие',
-        ];
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['title', 'startDay', 'endDay'], 'required'],
-            [['title', 'place'], 'string', 'min' => 3],
-            [['body'], 'string', 'min' => 3, 'max' => 250],
-            [['isImportant'], 'boolean', 'trueValue' => true, 'falseValue' => false, 'strict' => false],
-            ['endDay', 'compare', 'compareAttribute' => 'startDay', 'operator' => '>='],
+            [['activity_name', 'activity_start_timestamp'], 'required'],
+            [['activity_start_timestamp', 'activity_end_timestamp'], 'safe'],
+            [['id_user', 'is_important', 'created_at', 'updated_at'], 'integer'],
+            [['body'], 'string'],
+            [['activity_name', 'place'], 'string', 'min' => 3, 'max' => 255],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id_user']],
+            [['activity_end_timestamp'], 'compare', 'compareAttribute' => 'activity_start_timestamp', 'operator' => '>='],
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id_activity' => 'Id Activity',
+            'activity_name' => 'Название события',
+            'activity_start_timestamp' => 'Начало события',
+            'activity_end_timestamp' => 'Окончание события',
+            'id_user' => 'Пользователь',
+            'place' => 'Место',
+            'is_important' => 'Важное событие',
+            'body' => 'Описание',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id_user' => 'id_user']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDays()
+    {
+        return $this->hasMany(Day::className(), ['id_activity' => 'id_activity']);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class
+            ],
+
+            'user' => [
+                'class' => AttributeBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'id_user',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'id_user',
+                ],
+                'value' => function($event) {
+                    return Yii::$app->user->identity->login === 'admin' ? $this->id_user : Yii::$app->user->identity->id_user;
+                }
+
+            ],
+
+            'endDay' => [
+                'class' => AttributeBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'activity_end_timestamp',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'activity_end_timestamp',
+                ],
+                'value' => function ($event) {
+                    return $this->activity_end_timestamp ? $this->activity_end_timestamp : $this->activity_start_timestamp;
+                }
+            ],
+
+
+        ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+        $array = explode('-', $this->activity_start_timestamp);
+        $this->activity_start_timestamp = mktime(0,0,0, (int)$array[1], (int)$array[2], (int)$array[0]);
+
+        if ($this->activity_end_timestamp) {
+            $array = explode('-', $this->activity_end_timestamp);
+            $this->activity_end_timestamp = mktime(0,0,0, (int)$array[1], (int)$array[2], (int)$array[0]);
+        }
+
+        return parent::beforeSave($insert);
+    }
+
+    public function getPrimaryKey($asArray = false)
+    {
+        return parent::getPrimaryKey($asArray); // TODO: Change the autogenerated stub
+    }
+
+
 }

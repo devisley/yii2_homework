@@ -34,9 +34,9 @@ class m181028_183510_insert_data extends Migration
      */
     public function safeDown()
     {
-        $this->truncateTable('bookAuthor');
-        $this->truncateTable('author');
-        $this->truncateTable('book');
+//        $this->truncateTable('bookAuthor');
+//        $this->truncateTable('author');
+//        $this->truncateTable('book');
     }
 
     /*

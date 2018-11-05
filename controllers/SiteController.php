@@ -79,7 +79,12 @@ class SiteController extends MyController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if (Yii::$app->user->identity->login === 'admin') {
+                Yii::$app->setLayoutPath('@admin_module/views/layouts');
+                return $this->redirect('/admin');
+            } else {
+                return $this->goBack();
+            }
         }
 
         $model->password = '';
@@ -142,8 +147,6 @@ class SiteController extends MyController
                 $user = new User();
 
                 $user->setAttributes($model->getAttributes());
-//                var_dump($model);
-//                var_dump($user);
                 $user->password = $user->getPasswordHash($user->password);
                 if ($user->save()) {
                     return $this->redirect('login');

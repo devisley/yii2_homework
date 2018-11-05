@@ -10,6 +10,9 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@admin_module'   => '@app/modules/admin',
+        '@a'   => 'activity',
+        '@u'   => 'user',
     ],
     'modules' => [
         'admin' => [

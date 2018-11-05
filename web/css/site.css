@@ -125,3 +125,37 @@ a.desc:after {
     margin-top: 20px;
     padding: 10px;
 }
+
+.calendar-box {
+    padding: 0 10px;
+}
+
+.carousel-control {
+    width: 10%;
+}
+
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.calendar__item {
+    display: block;
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border: 1px solid grey;
+    text-decoration: none;
+}
+
+h2,h1 {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.cabinet {
+    font-size: 18px;
+}
+

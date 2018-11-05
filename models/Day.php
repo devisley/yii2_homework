@@ -16,7 +16,7 @@ class Day extends Model
      *
      * @var int
      */
-    public $day;
+    public $timestamp;
 
     /**
      * Выходной день
@@ -50,7 +50,7 @@ class Day extends Model
     {
         parent::__construct($config);
         $this->setAttributes($values, false);
-        $this->isWeekend = self::isWeekend($this->day);
+        $this->isWeekend = self::isWeekend($this->timestamp);
         $this->dayName = $this->getDayName();
     }
 
@@ -60,7 +60,7 @@ class Day extends Model
      * @return string Полное имя дня недели на русском
      */
     private function getDayName() {
-        $name = date("l", $this->day);
+        $name = date("l", $this->timestamp);
 
         $days = [
             'Sunday' => 'Воскресенье',

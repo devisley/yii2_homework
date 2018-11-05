@@ -24,6 +24,6 @@ class m181028_182956_create_author_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('author');
+//        $this->dropTable('author');
     }
 }

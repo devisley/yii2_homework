@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\NotSupportedException;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
 
 /**
@@ -49,9 +50,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'id_user' => 'Id User',
             'name' => 'Name',
-            'login' => 'Login',
+            'login' => 'Логин',
             'password' => 'Password',
             'last_access' => 'Last Access',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'lastAccess' => [
+                'class' => AccessBehavior::class,
+            ],
         ];
     }
 

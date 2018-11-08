@@ -30,14 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_activity',
             'activity_name',
-            'activity_start_timestamp',
-            'activity_end_timestamp',
+            'activity_start_timestamp:datetime',
+            'activity_end_timestamp:datetime',
             'id_user',
             'place',
             'is_important',
             'body:ntext',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

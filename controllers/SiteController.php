@@ -149,6 +149,15 @@ class SiteController extends MyController
                 $user->setAttributes($model->getAttributes());
                 $user->password = $user->getPasswordHash($user->password);
                 if ($user->save()) {
+                    $auth = \Yii::$app->authManager;
+                    $simple = $auth->getRole('simple');
+                    //Связываем роль с пользователем
+                    try {
+                        $auth->assign($simple, $user->getPrimaryKey());
+                    } catch (\Exception $exception)
+                    {
+                        echo 'Ошибка при создании роли'.PHP_EOL;
+                    }
                     return $this->redirect('login');
                 }
             }

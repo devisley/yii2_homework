@@ -9,6 +9,7 @@
 namespace app\controllers;
 use app\models\RegistryForm;
 use app\models\User;
+use yii\filters\AccessControl;
 
 class CabinetController extends MyController
 {
@@ -29,5 +30,22 @@ class CabinetController extends MyController
 
         return $this->render('index', ['model' => $model]);
     }
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['simple'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
 
 }

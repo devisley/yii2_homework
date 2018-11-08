@@ -8,15 +8,12 @@
 
 namespace app\controllers;
 use app\models\Calendar;
+use yii\filters\AccessControl;
 
 class CalendarController extends MyController
 {
     public function actionIndex($shift)
     {
-        if (\Yii::$app->user->isGuest) {
-            return $this->redirect('/site/login');
-        }
-
         $activities = Calendar::getMonthActivities($shift);
         $monthName = Calendar::$monthName;
 
@@ -29,5 +26,22 @@ class CalendarController extends MyController
             'params' => $params,
             'shift' => $shift
         ]);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['admin', 'simple'],
+                    ],
+                ],
+            ],
+
+        ];
     }
 }

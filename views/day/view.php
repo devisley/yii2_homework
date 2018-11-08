@@ -7,6 +7,7 @@
  */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ListView;
 ?>
 
@@ -20,3 +21,6 @@ echo ListView::widget([
 ]);
 
 ?>
+
+<?= Html::a('Добавить', Url::toRoute(['activity/create', 'date' => Yii::$app->request->get('date')]), ['class' => 'btn btn-success btn-lg btn-my'])?>
+

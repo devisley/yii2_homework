@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Activity;
 use app\models\ActivitySearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,6 +32,15 @@ class ActivityController extends MyController
                 'class' => PageCache::class,
                 'only' => ['view'],
                 'duration' => 10,
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['simple', 'admin'],
+                    ],
+                ],
             ],
         ];
     }

@@ -16,7 +16,13 @@ use app\models\User;
 
     <?= $form->field($model, 'activity_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'activity_start_timestamp')->input('date', ['min' => date("Y-m-d")]) ?>
+    <?php if(Yii::$app->request->get('date')): ?>
+        <?= $form->field($model, 'activity_start_timestamp')->input('date',
+            ['min' => date("Y-m-d"), 'value' => date('Y-m-d', Html::encode(Yii::$app->request->get('date')))]) ?>
+    <?php else: ?>
+        <?= $form->field($model, 'activity_start_timestamp')->input('date',
+            ['min' => date("Y-m-d")]) ?>
+    <?php endif;?>
 
     <?= $form->field($model, 'activity_end_timestamp')->input('date', ['min' => date("Y-m-d")]) ?>
 

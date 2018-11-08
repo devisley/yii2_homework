@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id_activity',
             'activity_name',
-            'activity_start_timestamp',
-            'activity_end_timestamp',
+            'activity_start_timestamp:datetime',
+            'activity_end_timestamp:datetime',
             'id_user',
             'user.login',
             //'place',
